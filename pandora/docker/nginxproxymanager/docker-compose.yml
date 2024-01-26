@@ -1,0 +1,19 @@
+version: '3.8'
+
+networks:
+  ingress:
+    name: proxy
+    external: true
+
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginxproxymanager
+    restart: unless-stopped
+    ports:
+      - '443:443' # Public HTTPS Port
+    networks:
+      - ingress
+    volumes:
+      - /srv/docker/nginxproxymanager/data:/data
+      - /srv/docker/nginxproxymanager/letsencrypt:/etc/letsencrypt
