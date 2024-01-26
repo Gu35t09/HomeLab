@@ -1,0 +1,13 @@
+---
+- hosts: all  # Run on all hosts
+  become: yes # Use sudo
+
+  tasks:
+    - import_tasks: tasks/main.yml
+
+- hosts: master # Run on only k3s controller
+  become: yes # Use sudo
+ 
+  tasks: 
+    - import_tasks: tasks/pre-k3s-master.yml
+
