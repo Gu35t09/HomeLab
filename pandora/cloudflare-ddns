@@ -1,0 +1,12 @@
+version: '2'
+services:
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    restart: unless-stopped
+    environment:
+      - API_KEY="segreta"
+      - ZONE=greyroom.net
+      - PROXIED=false
+      - PUID=1000
+      - PGID=1000
