@@ -1,0 +1,17 @@
+#docker create a new CHAIN and UFW only check the default one
+
+- name: Allow port 22 (SSH)
+  community.general.ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+
+- name: Allow port 53 (DNS)
+  community.general.ufw:
+    rule: allow
+    port: '53'
+    proto: tcp
+
+- name: enable UFW
+  community.general.ufw:
+    state: enabled

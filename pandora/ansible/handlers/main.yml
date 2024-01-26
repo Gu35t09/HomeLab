@@ -1,0 +1,12 @@
+- name: restart docker
+  service:
+    name: docker
+    state: "{{ docker_restart_handler_state }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+  when: docker_service_manage | bool
+
+- name: restart ntp
+  service: name=ntp state=restarted
+  
+- name: force ntp update
+  shell: "service ntp stop && ntpdate -s {{ hostvars[groups[timelord][0]]['ansible_' ~ ntp_netdevice]['ipv4']['address'] }} && service ntp start"

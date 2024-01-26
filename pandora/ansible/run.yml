@@ -1,0 +1,14 @@
+- hosts: all
+  become: yes #this mean that ansible will run the tasks as sudo
+
+  pre_tasks:
+    - import_tasks: tasks/main.yml
+  
+  roles:
+  - role: jnv.unattended-upgrades
+    unattended_origins_patterns:
+    - 'origin=Ubuntu,archive=${distro_codename}-security'
+    - 'o=Ubuntu,a=${distro_codename}'
+    - 'o=Ubuntu,a=${distro_codename}-updates'
+    - 'o=Ubuntu,a=${distro_codename}-proposed-updates'
+    unattended_mail: 'mattia.vallortigara@protonmail.com'

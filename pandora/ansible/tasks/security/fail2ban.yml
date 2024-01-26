@@ -1,0 +1,11 @@
+# packages istalled with variable in group_vars
+
+- name: Enable fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    enabled: true
+
+- name: Start fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: started

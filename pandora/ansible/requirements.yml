@@ -1,0 +1,6 @@
+---
+roles:
+    - name: geerlingguy.repo-epel
+    - name: geerlingguy.docker
+    - name: jnv.unattended-upgrades
+    - name: geerlingguy.pip

@@ -1,0 +1,54 @@
+---
+- name: Update packages
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+    upgrade: yes
+
+- name: Install essential packages
+  package:
+    name: "{{ packages }}"
+    state: latest
+
+- name: Set the hostname
+  hostname:
+    name: "server"
+
+- name: Disable cron e-mail notifications
+  cron:
+    name: MAILTO
+    user: root
+    env: yes
+    job: ""
+
+- name: Suppress login message (hushlogin)
+  file:
+    path: "/home/{{ username }}/.hushlogin"
+    mode: 0644
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    modification_time: preserve #touch works just like normally, so if the file is already created it change the modification time so we suppress it
+    access_time: preserve
+    state: touch
+
+- name: Enable service S.M.A.R.T monitoring
+  ansible.builtin.systemd:
+    name: smartd
+    enabled: true
+    masked: no
+
+- name: Make sure S.M.A.R.T is running
+  ansible.builtin.systemd:
+    state: started
+    name: smartd
+
+- name: Check if reboot required
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required_file
+
+- name: Reboot if required
+  reboot:
+    msg: Rebooting due to a kernel update
+  when: reboot_required_file.stat.exists
+

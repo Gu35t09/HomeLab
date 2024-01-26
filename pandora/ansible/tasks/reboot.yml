@@ -1,0 +1,6 @@
+---
+- name: install update-notifier-common
+  apt:
+    pkg: update-notifier-common
+    state: present
+  failed_when: false

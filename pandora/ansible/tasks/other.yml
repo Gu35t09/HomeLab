@@ -1,0 +1,5 @@
+- name: Transfer the script
+  copy: src=other.sh dest=/home/mattia mode=0777
+
+- name: Execute the script
+  script: other.sh

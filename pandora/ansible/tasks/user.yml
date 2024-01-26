@@ -1,0 +1,36 @@
+---
+- name: Ensure all necesary group are created
+  group:
+    name: "{{ item }}"
+  loop:
+    - docker
+    - samba
+    - "{{ username }}"
+    - adm
+
+- name: Enable passwordless sudo for "{{ username }}"
+  lineinfile: 
+    dest: /etc/sudoers
+    regexp: "^%wheel"
+    line: "{{ username }} ALL=(ALL) NOPASSWD: ALL"
+    validate: "/usr/sbin/visudo -cf %s" #check if there is any problem with the sudoers file and in case revert the changes
+
+- name: Ensure the non-root user is created
+  user:
+    name: "{{ username }}"
+    password: "{{ password | password_hash('sha512') }}"
+    groups:
+      - sudo
+      - docker
+      - users
+      - adm
+    append: yes
+    shell: "{{ shell }}"
+    update_password: on_create
+
+- name: Disable cron e-mail notifications
+  cron:
+    name: MAILTO
+    user: "mattia"
+    env: yes
+    job: ""
