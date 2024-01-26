@@ -1,0 +1,64 @@
+---
+- name: Enable passwordless sudo for mattia"
+  lineinfile: 
+    dest: /etc/sudoers
+    regexp: "^%wheel"
+    line: "mattia ALL=(ALL) NOPASSWD: ALL"
+    validate: "/usr/sbin/visudo -cf %s" #check if there is any problem with the sudoers file and in case revert the changes
+
+- name: Update packages # apt update and upgrade
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+    upgrade: 'yes'
+
+- name: Install essential packages
+  package:
+    name: "{{ packages }}"
+    state: latest
+
+- name: Check if reboot required
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required_file
+
+- name: Reboot if required
+  reboot:
+    msg: Rebooting due to a kernel update
+  when: reboot_required_file.stat.exists
+
+- name: Ensure chrony (for time synchronization) is installed
+  package:
+    name: chrony
+    state: present
+
+- name: Ensure chrony is running
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+
+- name: Ensure UFW and fail2ban are installed # If not then install them
+  package:
+    name: 
+      - ufw
+      - fail2ban
+    state: present
+
+- name: Ensure fail2ban is running # If not then start it
+  service:
+    name: fail2ban
+    state: started
+    enabled: yes
+
+- name: Create SSH rule for UFW
+  ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
+  
+- name: Create DNS rule for UFW
+  ufw:
+    rule: allow
+    port: '53'
+    proto: tcp
