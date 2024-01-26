@@ -1,4 +1,4 @@
-# Infrastruttura
+# HomeLab - GreyRoom
 
 Componenti utilizzati nel mio HomeLab personale
 
