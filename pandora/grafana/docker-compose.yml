@@ -1,0 +1,16 @@
+version: "3.8"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    user: "0"
+    networks:
+      - proxy
+    volumes:
+      - /srv/docker/grafana/data:/var/lib/grafana
