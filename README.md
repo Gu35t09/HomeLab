@@ -9,4 +9,4 @@ Ansible playbook per la configurazione del Cluster Hat composto da un Raspberry 
 Ansible playbook per il deploy/upgrade/destroy di un cluster k3s
 
 <b>Pandora:</b>
-Server docker con la maggiorparte dei servizi
+Server docker con la maggior parte dei servizi + ansible playbook per la prima configurazione
