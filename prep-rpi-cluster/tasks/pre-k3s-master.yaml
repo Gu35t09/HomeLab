@@ -1,0 +1,52 @@
+---
+- name: Create first NFS rule for UFW
+  ufw:
+    rule: allow
+    port: 1111
+
+- name: Create secondo NFS rule for UFW
+  ufw:
+    rule: allow
+    port: 2049
+
+- name: Ensure NFS server is installed 
+  package:
+    name: nfs-kernel-server
+    state: present
+
+- name: Create NFS folder on master
+  file:
+    dest: /srv/k3s-data
+    owner: mattia
+    group: mattia
+    mode: '0777'
+    state: directory
+
+- name: Permit access to NFS share for node 1
+  lineinfile: 
+    dest: /etc/exports
+    line: "/srv/k3s-data 192.168.100.201/32(rw,sync,no_subtree_check)"
+
+- name: Permit access to NFS share for node 2
+  lineinfile: 
+    dest: /etc/exports
+    line: "/srv/k3s-data 192.168.100.202/32(rw,sync,no_subtree_check)"
+
+- name: Permit access to NFS share for node 3
+  lineinfile: 
+    dest: /etc/exports
+    line: "/srv/k3s-data 192.168.100.203/32(rw,sync,no_subtree_check)"
+
+- name: Permit access to NFS share for node 4
+  lineinfile: 
+    dest: /etc/exports
+    line: "/srv/k3s-data 192.168.100.204/32(rw,sync,no_subtree_check)"
+
+- name: Restart nfs-kernel-server.service 
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    state: started
+    name: nfs-kernel-server.service
+
+- name: Re-export the share
+  command: sudo exportfs -rav
