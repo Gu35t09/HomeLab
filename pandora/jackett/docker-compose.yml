@@ -1,0 +1,23 @@
+---
+version: "2.1"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+      - AUTO_UPDATE=true #optional
+      #- RUN_OPTS= #optional
+    networks:
+      - proxy
+    volumes:
+      - /srv/docker/jackett/data:/config
+      - /mnt/jackett/blackhole:/downloads
+    restart: unless-stopped
