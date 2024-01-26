@@ -1,0 +1,35 @@
+version: "3"
+
+networks:
+  proxy:
+    external: true
+  backend:
+
+services:
+  nextcloud-app:
+    image: nextcloud
+    restart: always
+    volumes:
+      - /srv/docker/nextcloud/data:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=segreta
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=nextcloud-db
+    networks:
+      - proxy
+      - backend
+
+  nextcloud-db:
+    image: mariadb
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - /srv/docker/nextcloud/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=segreta
+      - MYSQL_PASSWORD=segreta
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - backend
