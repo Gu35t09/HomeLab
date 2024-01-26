@@ -1,0 +1,22 @@
+---
+version: "2.1"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /srv/docker/radarr/data:/config
+      - /mnt/radarr/movies:/movies #optional
+      - /mnt/radarr/downloadclient-downloads:/downloads #optional
+    networks:
+      - proxy
+    restart: unless-stopped
