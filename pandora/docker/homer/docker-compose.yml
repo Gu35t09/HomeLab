@@ -1,0 +1,19 @@
+---
+version: "2"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - /srv/docker/homer/assets/:/www/assets
+    networks:
+      - proxy
+    user: 0:0 # default
+    environment:
+      - INIT_ASSETS=1 # default
+    restart: unless-stopped
