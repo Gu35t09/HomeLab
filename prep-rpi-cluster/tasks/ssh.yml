@@ -1,0 +1,34 @@
+---
+- name: Disable SSH password Authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^#PasswordAuthentication yes"
+    line: "PasswordAuthentication no"
+  register: sshd_config
+
+- name: Disable SSH password Authentication pt2
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^#ChallengeResponseAuthentication yes"
+    line: "ChallengeResponseAuthentication no"
+
+- name: Update SSH configuration to be more secure
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -T -f %s'
+    mode: 0644
+  with_items:
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin no"
+    - regexp: "^PermitEmptyPasswords"
+      line: "PermitEmptyPasswords no"
+  register: sshd_config
+
+- name: Restart SSHD daemon
+  service:
+    name: sshd
+    state: restarted
+  when: sshd_config.changed
