@@ -1,0 +1,6 @@
+---
+packages:
+  - htop
+  - tmux
+  - powertop
+  - nfs-common
