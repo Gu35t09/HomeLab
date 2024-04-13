@@ -37,28 +37,3 @@
     name: chronyd
     state: started
     enabled: yes
-
-- name: Ensure UFW and fail2ban are installed # If not then install them
-  package:
-    name: 
-      - ufw
-      - fail2ban
-    state: present
-
-- name: Ensure fail2ban is running # If not then start it
-  service:
-    name: fail2ban
-    state: started
-    enabled: yes
-
-- name: Create SSH rule for UFW
-  ufw:
-    rule: allow
-    port: '22'
-    proto: tcp
-  
-- name: Create DNS rule for UFW
-  ufw:
-    rule: allow
-    port: '53'
-    proto: tcp
