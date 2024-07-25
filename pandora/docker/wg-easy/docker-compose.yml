@@ -7,7 +7,7 @@ networks:
 services:
   wg-easy:
     environment:
-      - WG_HOST=greyroom.net
+      - WG_HOST=ip_o_dns_pubblico
       - PASSWORD=segreta
       - WG_ALLOWED_IPS=192.168.100.0/24, 10.0.0.0/8
       - WG_DEFAULT_DNS=192.168.1.254
