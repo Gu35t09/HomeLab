@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     environment:
       - API_KEY="segreta"
-      - ZONE=greyroom.net
+      - ZONE=dominio
       - PROXIED=false
       - PUID=1000
       - PGID=1000
